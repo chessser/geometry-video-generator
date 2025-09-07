@@ -8,6 +8,7 @@ const createMockElement = (tagName: string) => ({
   textContent: '',
   appendChild: vi.fn(),
   createElement: vi.fn(),
+  addEventListener: vi.fn(),
   selected: false,
   value: '',
 });

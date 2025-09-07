@@ -28,5 +28,5 @@ test('renderPentagram renders without errors', () => {
   const params = defaultParams();
 
   expect(() => renderPentagram(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.closePath).toHaveBeenCalled();
+  expect(ctx.stroke).toHaveBeenCalled();
 });

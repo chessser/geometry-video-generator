@@ -10,7 +10,6 @@ import {
   renderMandala,
   renderHexagram,
   renderPentagram,
-  renderMorphingPattern,
   type PatternType,
 } from './patterns';
 import { hashToSeed } from '../core/hash';
@@ -26,13 +25,23 @@ const PATTERNS: PatternType[] = [
   'mandala',
   'hexagram',
   'pentagram',
-  'morphing',
 ];
 const PATTERN_DURATION = 20;
 const FADE_DURATION = 6;
 
-export function renderSacredGeometry(ctx: CanvasRenderingContext2D, params: Params, t: number) {
+export function renderSacredGeometry(
+  ctx: CanvasRenderingContext2D,
+  params: Params,
+  t: number,
+  singlePattern?: string,
+) {
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  // Single pattern mode
+  if (singlePattern && PATTERNS.includes(singlePattern as any)) {
+    renderPattern(ctx, singlePattern as any, params, t, 1.0);
+    return;
+  }
 
   const seed = hashToSeed('pattern-sequence');
   const multiPatternSeed = hashToSeed('multi-pattern');
@@ -118,9 +127,6 @@ function renderPattern(
       break;
     case 'pentagram':
       renderPentagram(ctx, params, t, alpha);
-      break;
-    case 'morphing':
-      renderMorphingPattern(ctx, params, t, alpha);
       break;
   }
 }

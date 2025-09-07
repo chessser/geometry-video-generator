@@ -121,3 +121,25 @@ test('renderSacredGeometry renders variable pattern counts', () => {
   expect(ctx.clearRect).toHaveBeenCalledTimes(20);
   expect(ctx.save).toHaveBeenCalled();
 });
+
+test('renderSacredGeometry handles single pattern mode', () => {
+  const ctx = createMockContext() as any;
+  const params = defaultParams();
+
+  renderSacredGeometry(ctx, params, 1.0, 'flower-of-life');
+  renderSacredGeometry(ctx, params, 2.0, 'pentagram');
+  renderSacredGeometry(ctx, params, 3.0, 'mandala');
+
+  expect(ctx.clearRect).toHaveBeenCalledTimes(3);
+  expect(ctx.save).toHaveBeenCalled();
+});
+
+test('renderSacredGeometry ignores invalid single patterns', () => {
+  const ctx = createMockContext() as any;
+  const params = defaultParams();
+
+  renderSacredGeometry(ctx, params, 1.0, 'invalid-pattern');
+
+  expect(ctx.clearRect).toHaveBeenCalledTimes(1);
+  expect(ctx.save).toHaveBeenCalled();
+});

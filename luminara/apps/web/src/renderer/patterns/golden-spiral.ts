@@ -1,6 +1,11 @@
 import type { Params } from '../../core/params';
-import { hashToSeed } from '../../core/hash';
-import { applyBoundaryBehavior } from '../boundaries';
+import {
+  setupPattern,
+  finishPattern,
+  getChaosOffset,
+  getChaosThickness,
+  shouldUseChaos,
+} from './pattern-base';
 
 export function renderGoldenSpiral(
   ctx: CanvasRenderingContext2D,
@@ -8,43 +13,59 @@ export function renderGoldenSpiral(
   t: number,
   alpha: number = 1,
 ) {
-  const { width, height } = ctx.canvas;
-  const seed = hashToSeed('spiral-position');
-  const moveSpeed = 0.12 + (seed % 70) / 1300;
-  const rawX = width / 2 + width * 0.4 * Math.sin(t * moveSpeed * 0.7);
-  const rawY = height / 2 + height * 0.35 * Math.cos(t * moveSpeed);
+  const { size, seed } = setupPattern(ctx, params, t, alpha, {
+    id: 'golden-spiral',
+    moveSpeed: 0.12,
+    size: 0.28,
+    movementRange: 0.35,
+    pulseRate: 0.5,
+    rotationRate: 0.04,
+    hueBase: 45,
+  });
 
-  const size = Math.min(width, height) * 0.28 * params.scale;
-  const boundary = applyBoundaryBehavior(rawX, rawY, width, height, size * 2, 'golden-spiral');
-  const centerX = boundary.x;
-  const centerY = boundary.y;
-  alpha *= boundary.alpha;
-
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.translate(centerX, centerY);
-  ctx.rotate(t * 0.04);
-
-  const hue = (t * 35 + 45) % 360;
-  ctx.strokeStyle = `hsl(${hue}, 85%, 60%)`;
-  ctx.lineWidth = 4 + 8 * Math.sin(t * 0.5);
+  const useDrift = shouldUseChaos(seed, 'drift');
+  const useThickness = shouldUseChaos(seed + 1, 'thickness');
 
   const phi = 1.618;
-  ctx.beginPath();
-  for (let i = 0; i < 100; i++) {
-    const angle = i * 0.2;
-    const radius = size * 0.02 * Math.pow(phi, angle * 0.1);
+  const evolution = (t * 0.08) % 1;
+  const numArms = Math.floor(1 + evolution * 3);
+  const maxPoints = Math.floor(60 + evolution * 80);
 
-    // Add spiral point drift
-    const driftX = radius * 0.3 * Math.sin(t * 0.3 + i * 0.1);
-    const driftY = radius * 0.25 * Math.cos(t * 0.4 + i * 0.12);
+  for (let arm = 0; arm < numArms; arm++) {
+    const armOffset = (arm / numArms) * Math.PI * 2;
 
-    const x = Math.cos(angle) * radius + driftX;
-    const y = Math.sin(angle) * radius + driftY;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
+    ctx.beginPath();
+    for (let i = 0; i < maxPoints; i++) {
+      const angle = i * 0.15 + armOffset;
+      const radius = size * 0.015 * Math.pow(phi, angle * 0.08);
+
+      const thicknessFactor = 0.5 + (i / maxPoints) * 1.5;
+      if (useThickness) {
+        ctx.lineWidth = getChaosThickness(t, seed, i) * thicknessFactor;
+      } else {
+        ctx.lineWidth = thicknessFactor * (0.8 + 0.4 * Math.sin(t * 0.5 + arm));
+      }
+
+      let x = Math.cos(angle) * radius;
+      let y = Math.sin(angle) * radius;
+
+      if (useDrift) {
+        const offset = getChaosOffset(t, seed, i + arm * 100, radius * 0.1);
+        x += offset.x;
+        y += offset.y;
+      }
+
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+
+      if (i > 0 && i % 8 === 0) {
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+      }
+    }
+    ctx.stroke();
   }
-  ctx.stroke();
 
-  ctx.restore();
+  finishPattern(ctx);
 }

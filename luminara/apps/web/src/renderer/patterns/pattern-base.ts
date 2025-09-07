@@ -90,12 +90,11 @@ export function setupPattern(
   const lightness = lightnessBase + 15 * Math.cos(t * 0.6 + seed * 1.3);
   ctx.strokeStyle = `hsl(${hue}, ${Math.max(30, Math.min(100, saturation))}%, ${Math.max(20, Math.min(80, lightness))}%)`;
 
-  // Much thicker lines with dramatic variation
-  const thicknessPulse = 3 + 8 * Math.sin(t * (0.7 + (seed % 5) * 0.1));
-  const thicknessWave = 2 + 4 * Math.cos(t * (1.2 + (seed % 3) * 0.15));
-  const thicknessTremble = 1 + 2 * Math.sin(t * (3 + (seed % 7) * 0.2));
-  const thickness = thicknessPulse * thicknessWave * thicknessTremble + (seed % 12) * 0.5;
-  ctx.lineWidth = Math.max(1, thickness);
+  // Moderate line thickness variation
+  const thicknessPulse = 1.5 + 2 * Math.sin(t * (0.7 + (seed % 5) * 0.1));
+  const thicknessWave = 1 + 1.5 * Math.cos(t * (1.2 + (seed % 3) * 0.15));
+  const thickness = thicknessPulse * thicknessWave + (seed % 4) * 0.3;
+  ctx.lineWidth = Math.max(0.8, thickness);
 
   return { size, seed, hue };
 }
@@ -111,9 +110,9 @@ export function getChaosOffset(t: number, seed: number, index: number, amplitude
 }
 
 export function getChaosThickness(t: number, seed: number, index: number = 0) {
-  const base = 4 + (seed % 8);
-  const pulse = 8 * Math.sin(t * (0.6 + (seed % 4) * 0.1) + index * 0.8);
-  return Math.max(1, base + pulse);
+  const base = 1.5 + (seed % 3);
+  const pulse = 2 * Math.sin(t * (0.6 + (seed % 4) * 0.1) + index * 0.8);
+  return Math.max(0.8, base + pulse);
 }
 
 export function shouldUseChaos(seed: number, chaosType: 'drift' | 'thickness' | 'both') {

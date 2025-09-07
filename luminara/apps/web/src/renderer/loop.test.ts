@@ -12,7 +12,7 @@ test('startLoop handles missing canvas context', () => {
     getContext: vi.fn(() => null),
   } as any;
 
-  expect(() => startLoop(canvas)).not.toThrow();
+  expect(() => startLoop(canvas, { theme: 'sacred-geometry' })).not.toThrow();
   expect(canvas.getContext).toHaveBeenCalledWith('2d');
 });
 
@@ -48,7 +48,7 @@ test('startLoop starts render loop with valid context', () => {
   const originalRAF = global.requestAnimationFrame;
   global.requestAnimationFrame = vi.fn();
 
-  startLoop(canvas);
+  startLoop(canvas, { theme: 'sacred-geometry' });
 
   expect(canvas.getContext).toHaveBeenCalledWith('2d');
   expect(global.requestAnimationFrame).toHaveBeenCalled();
@@ -92,7 +92,8 @@ test('startLoop animation callback executes render logic', () => {
     return 1;
   });
 
-  startLoop(canvas);
+  const params = { theme: 'sacred-geometry' };
+  startLoop(canvas, params);
 
   // Execute the animation callback
   animationCallback!(16.67);
@@ -107,6 +108,48 @@ test('startLoop handles null context gracefully', () => {
 
   global.requestAnimationFrame = vi.fn();
 
-  expect(() => startLoop(canvas)).not.toThrow();
+  expect(() => startLoop(canvas, { theme: 'sacred-geometry' })).not.toThrow();
   expect(global.requestAnimationFrame).not.toHaveBeenCalled();
+});
+
+test('startLoop handles individual pattern themes', () => {
+  const mockCtx = {
+    canvas: { width: 800, height: 600 },
+    fillStyle: '',
+    fillRect: vi.fn(),
+    clearRect: vi.fn(),
+    save: vi.fn(),
+    restore: vi.fn(),
+    translate: vi.fn(),
+    rotate: vi.fn(),
+    scale: vi.fn(),
+    transform: vi.fn(),
+    beginPath: vi.fn(),
+    arc: vi.fn(),
+    moveTo: vi.fn(),
+    lineTo: vi.fn(),
+    closePath: vi.fn(),
+    stroke: vi.fn(),
+    set globalAlpha(_value: number) {},
+    set strokeStyle(_value: string) {},
+    set lineWidth(_value: number) {},
+  };
+
+  const canvas = {
+    getContext: vi.fn(() => mockCtx),
+    width: 800,
+    height: 600,
+  } as any;
+
+  let animationCallback: Function;
+  global.requestAnimationFrame = vi.fn((cb) => {
+    animationCallback = cb;
+    return 1;
+  });
+
+  const params = { theme: 'flower-of-life' };
+  startLoop(canvas, params);
+  animationCallback!(16.67);
+
+  expect(mockCtx.clearRect).toHaveBeenCalled();
 });

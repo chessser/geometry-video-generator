@@ -14,9 +14,7 @@ case "$1" in
     npm test --prefix luminara/apps/web
     ;;
   all)
-    npm test --prefix luminara/apps/web && \
-    npm run build --prefix luminara/apps/web && \
-    npm run preview --prefix luminara/apps/web
+    $0 coverage && $0 docs && $0 lint && $0 format && $0 fix && $0 build && $0 preview
     ;;
   kill)
     pkill -f "luminara" 2>/dev/null || true
@@ -53,7 +51,7 @@ case "$1" in
     echo "  lint     - Run TypeScript linter"
     echo "  format   - Format TypeScript files"
     echo "  fix      - Fix lint issues and format files"
-    echo "  all      - Run test, build, and preview"
+    echo "  all      - Run coverage, docs, lint, format, fix, build, and preview"
     echo "  kill     - Kill all running luminara processes"
     ;;
 esac

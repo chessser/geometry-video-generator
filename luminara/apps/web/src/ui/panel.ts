@@ -1,6 +1,6 @@
 import { THEMES } from '../core/themes';
 
-export function attachPanel(root: HTMLElement) {
+export function attachPanel(root: HTMLElement, onThemeChange?: (theme: string) => void) {
   const panel = document.createElement('div');
   panel.style.cssText =
     'position:fixed;top:20px;left:20px;background:rgba(0,0,0,0.8);color:white;padding:15px;border-radius:8px;font-family:system-ui';
@@ -20,6 +20,13 @@ export function attachPanel(root: HTMLElement) {
     option.textContent = name;
     if (key === 'sacred-geometry') option.selected = true;
     themeSelect.appendChild(option);
+  });
+
+  themeSelect.addEventListener('change', (e) => {
+    const target = e.target as HTMLSelectElement;
+    if (onThemeChange) {
+      onThemeChange(target.value);
+    }
   });
 
   themeLabel.appendChild(themeSelect);

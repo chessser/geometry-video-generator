@@ -8,8 +8,7 @@ export type PatternType =
   | 'golden-spiral'
   | 'mandala'
   | 'hexagram'
-  | 'pentagram'
-  | 'morphing';
+  | 'pentagram';
 
 // Re-export all pattern functions
 export { renderFlowerOfLife } from './flower-of-life';
@@ -22,4 +21,3 @@ export { renderGoldenSpiral } from './golden-spiral';
 export { renderMandala } from './mandala';
 export { renderHexagram } from './hexagram';
 export { renderPentagram } from './pentagram';
-export { renderMorphingPattern } from './morphing';

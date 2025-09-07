@@ -40,8 +40,8 @@ test('main initializes canvas and starts app', async () => {
   expect(document.getElementById).toHaveBeenCalledWith('app');
   expect(document.createElement).toHaveBeenCalledWith('canvas');
   expect(mockRoot.replaceChildren).toHaveBeenCalledWith(mockCanvas);
-  expect(startLoop).toHaveBeenCalledWith(mockCanvas);
-  expect(attachPanel).toHaveBeenCalledWith(mockRoot);
+  expect(startLoop).toHaveBeenCalledWith(mockCanvas, expect.any(Object));
+  expect(attachPanel).toHaveBeenCalledWith(mockRoot, expect.any(Function));
 });
 
 test('main sets up resize listener', async () => {
