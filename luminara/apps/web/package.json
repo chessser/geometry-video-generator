@@ -8,7 +8,9 @@
     "preview": "vite preview --open",
     "test": "vitest run --config vitest.config.ts",
     "test:watch": "vitest --config vitest.config.ts",
-    "lint": "echo 'Linting ready for setup'"
+    "lint": "tsc --noEmit",
+    "lint:fix": "tsc --noEmit && prettier --write \"src/**/*.{ts,tsx}\"",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "keywords": [],
   "author": "",

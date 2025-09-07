@@ -3,7 +3,7 @@ import { setupPattern, finishPattern } from './pattern-base';
 import { defaultParams } from '../../core/params';
 
 vi.mock('../../core/hash', () => ({
-  hashToSeed: vi.fn(() => 12345)
+  hashToSeed: vi.fn(() => 12345),
 }));
 
 const createMockContext = () => ({
@@ -15,13 +15,13 @@ const createMockContext = () => ({
   transform: vi.fn(),
   set globalAlpha(_value: number) {},
   set strokeStyle(_value: string) {},
-  set lineWidth(_value: number) {}
+  set lineWidth(_value: number) {},
 });
 
 test('setupPattern configures canvas correctly', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
-  
+
   const result = setupPattern(ctx, params, 1.0, 1.0, {
     id: 'test-pattern',
     moveSpeed: 0.1,
@@ -29,9 +29,9 @@ test('setupPattern configures canvas correctly', () => {
     movementRange: 0.2,
     pulseRate: 0.5,
     rotationRate: 0.05,
-    hueBase: 180
+    hueBase: 180,
   });
-  
+
   expect(ctx.save).toHaveBeenCalled();
   expect(ctx.translate).toHaveBeenCalled();
   expect(ctx.rotate).toHaveBeenCalled();
@@ -40,8 +40,8 @@ test('setupPattern configures canvas correctly', () => {
 
 test('finishPattern restores canvas', () => {
   const ctx = createMockContext() as any;
-  
+
   finishPattern(ctx);
-  
+
   expect(ctx.restore).toHaveBeenCalled();
 });

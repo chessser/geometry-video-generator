@@ -10,7 +10,7 @@ export function startLoop(canvas: HTMLCanvasElement) {
 
   function frame(now: number) {
     const t = (now - start) / 1000;
-    
+
     if (params.theme === 'sacred-geometry') {
       renderSacredGeometry(ctx!, params, t);
     } else {

@@ -14,14 +14,14 @@ test('getDefaultTheme returns sacred-geometry', () => {
 
 test('all theme keys are valid Theme types', () => {
   const validThemes: Theme[] = ['sacred-geometry', 'fractals', 'organic', 'minimal'];
-  
-  Object.keys(THEMES).forEach(key => {
+
+  Object.keys(THEMES).forEach((key) => {
     expect(validThemes).toContain(key as Theme);
   });
 });
 
 test('theme display names are strings', () => {
-  Object.values(THEMES).forEach(name => {
+  Object.values(THEMES).forEach((name) => {
     expect(typeof name).toBe('string');
     expect(name.length).toBeGreaterThan(0);
   });

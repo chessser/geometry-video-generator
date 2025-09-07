@@ -12,12 +12,12 @@ export type Params = {
 import { getDefaultTheme } from './themes';
 
 export function defaultParams(): Params {
-  return { 
+  return {
     theme: getDefaultTheme(),
-    symmetry: 6, 
-    angle: 0.0, 
-    scale: 1.0, 
-    iter: 8, 
-    paletteIdx: 0 
+    symmetry: 6,
+    angle: 0.0,
+    scale: 1.0,
+    iter: 8,
+    paletteIdx: 0,
   };
 }
