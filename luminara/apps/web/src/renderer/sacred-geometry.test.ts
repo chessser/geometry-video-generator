@@ -75,7 +75,7 @@ test('renderSacredGeometry handles multi-pattern mode', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
   
-  // Test multiple time values to potentially trigger multi-pattern mode
+  // Test multiple time values - now always renders multiple patterns
   renderSacredGeometry(ctx, params, 1.0);
   renderSacredGeometry(ctx, params, 10.0);
   
@@ -87,22 +87,37 @@ test('renderSacredGeometry covers all pattern render cases', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
   
-  // Test different time values to hit different patterns
+  // Test different time values - now renders 1-7 patterns based on probability
   for (let i = 0; i < 10; i++) {
-    renderSacredGeometry(ctx, params, i * 15); // Different pattern indices
+    renderSacredGeometry(ctx, params, i * 15);
   }
   
-  expect(ctx.clearRect).toHaveBeenCalled();
+  expect(ctx.clearRect).toHaveBeenCalledTimes(10);
+  expect(ctx.save).toHaveBeenCalled();
 });
 
 test('renderSacredGeometry handles multi-pattern rendering branches', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
   
-  // Test with different time offsets to trigger multi-pattern logic
+  // Test with different time offsets - system now always uses multi-pattern logic
   renderSacredGeometry(ctx, params, 5.5);
   renderSacredGeometry(ctx, params, 25.3);
   renderSacredGeometry(ctx, params, 100.7);
   
-  expect(ctx.clearRect).toHaveBeenCalled();
+  expect(ctx.clearRect).toHaveBeenCalledTimes(3);
+  expect(ctx.save).toHaveBeenCalled();
+});
+
+test('renderSacredGeometry renders variable pattern counts', () => {
+  const ctx = createMockContext() as any;
+  const params = defaultParams();
+  
+  // Test multiple calls to potentially hit different pattern counts (1-7)
+  for (let i = 0; i < 20; i++) {
+    renderSacredGeometry(ctx, params, i * 3.7);
+  }
+  
+  expect(ctx.clearRect).toHaveBeenCalledTimes(20);
+  expect(ctx.save).toHaveBeenCalled();
 });

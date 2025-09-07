@@ -26,13 +26,18 @@ case "$1" in
   coverage)
     npm run test --prefix luminara/apps/web -- --coverage
     ;;
+  docs)
+    echo "Generating documentation images..."
+    node scripts/generate-docs.js
+    ;;
   *)
-    echo "Usage: ./run.sh [dev|build|preview|test|all|kill|coverage]"
+    echo "Usage: ./run.sh [dev|build|preview|test|all|kill|coverage|docs]"
     echo "  dev      - Start development server (auto-opens Chrome)"
     echo "  build    - Build for production"
     echo "  preview  - Preview production build (auto-opens Chrome)"
     echo "  test     - Run unit tests"
     echo "  coverage - Run tests with coverage report"
+    echo "  docs     - Generate documentation images"
     echo "  all      - Run test, build, and preview"
     echo "  kill     - Kill all running luminara processes"
     ;;

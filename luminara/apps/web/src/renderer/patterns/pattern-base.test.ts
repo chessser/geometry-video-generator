@@ -1,5 +1,5 @@
 import { test, expect, vi } from 'vitest';
-import { renderFlowerOfLife } from './flower-of-life';
+import { setupPattern, finishPattern } from './pattern-base';
 import { defaultParams } from '../../core/params';
 
 vi.mock('../../core/hash', () => ({
@@ -12,22 +12,36 @@ const createMockContext = () => ({
   restore: vi.fn(),
   translate: vi.fn(),
   rotate: vi.fn(),
-  scale: vi.fn(),
   transform: vi.fn(),
-  beginPath: vi.fn(),
-  arc: vi.fn(),
-  stroke: vi.fn(),
   set globalAlpha(_value: number) {},
   set strokeStyle(_value: string) {},
   set lineWidth(_value: number) {}
 });
 
-test('renderFlowerOfLife renders without errors', () => {
+test('setupPattern configures canvas correctly', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
   
-  expect(() => renderFlowerOfLife(ctx, params, 1.0, 1.0)).not.toThrow();
+  const result = setupPattern(ctx, params, 1.0, 1.0, {
+    id: 'test-pattern',
+    moveSpeed: 0.1,
+    size: 0.3,
+    movementRange: 0.2,
+    pulseRate: 0.5,
+    rotationRate: 0.05,
+    hueBase: 180
+  });
+  
   expect(ctx.save).toHaveBeenCalled();
+  expect(ctx.translate).toHaveBeenCalled();
+  expect(ctx.rotate).toHaveBeenCalled();
+  expect(result.size).toBeGreaterThan(0);
+});
+
+test('finishPattern restores canvas', () => {
+  const ctx = createMockContext() as any;
+  
+  finishPattern(ctx);
+  
   expect(ctx.restore).toHaveBeenCalled();
-  expect(ctx.arc).toHaveBeenCalled();
 });

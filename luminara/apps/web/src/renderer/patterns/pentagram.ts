@@ -1,28 +1,16 @@
 import type { Params } from '../../core/params';
-import { hashToSeed } from '../../core/hash';
-import { applyBoundaryBehavior } from '../boundaries';
+import { setupPattern, finishPattern } from './pattern-base';
 
 export function renderPentagram(ctx: CanvasRenderingContext2D, params: Params, t: number, alpha: number = 1) {
-  const { width, height } = ctx.canvas;
-  const seed = hashToSeed('pentagram-position');
-  const moveSpeed = 0.105 + (seed % 75) / 1500;
-  const rawX = width / 2 + (width * 0.36) * Math.cos(t * moveSpeed * 0.9);
-  const rawY = height / 2 + (height * 0.34) * Math.sin(t * moveSpeed * 0.7);
-  
-  const size = Math.min(width, height) * 0.25 * params.scale;
-  const boundary = applyBoundaryBehavior(rawX, rawY, width, height, size * 2, 'pentagram');
-  const centerX = boundary.x;
-  const centerY = boundary.y;
-  alpha *= boundary.alpha;
-  
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.translate(centerX, centerY);
-  ctx.rotate(t * 0.06);
-  
-  const hue = (t * 45 + 320) % 360;
-  ctx.strokeStyle = `hsl(${hue}, 85%, 65%)`;
-  ctx.lineWidth = 1.8 + 0.7 * Math.sin(t * 0.5);
+  const { size } = setupPattern(ctx, params, t, alpha, {
+    id: 'pentagram',
+    moveSpeed: 0.105,
+    size: 0.42,
+    movementRange: 0.45,
+    pulseRate: 0.9,
+    rotationRate: 0.18,
+    hueBase: 320
+  });
   
   ctx.beginPath();
   for (let i = 0; i < 5; i++) {
@@ -40,5 +28,5 @@ export function renderPentagram(ctx: CanvasRenderingContext2D, params: Params, t
   ctx.closePath();
   ctx.stroke();
   
-  ctx.restore();
+  finishPattern(ctx);
 }

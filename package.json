@@ -1,0 +1,15 @@
+{
+  "name": "geometry-video-generator",
+  "version": "1.0.0",
+  "description": "Sacred geometry video generator for concert backdrops",
+  "scripts": {
+    "docs:generate": "node scripts/generate-docs.js",
+    "docs:update": "npm run docs:generate && echo 'Documentation images updated!'",
+    "dev": "cd luminara/apps/web && npm run dev",
+    "build": "cd luminara/apps/web && npm run build",
+    "test": "cd luminara/apps/web && npm test"
+  },
+  "keywords": ["sacred-geometry", "video-generator", "concert", "visuals"],
+  "author": "Generated via ChatGPT Agent",
+  "license": "MIT"
+}

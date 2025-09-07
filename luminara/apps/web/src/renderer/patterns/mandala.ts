@@ -5,11 +5,11 @@ import { applyBoundaryBehavior } from '../boundaries';
 export function renderMandala(ctx: CanvasRenderingContext2D, params: Params, t: number, alpha: number = 1) {
   const { width, height } = ctx.canvas;
   const seed = hashToSeed('mandala-position');
-  const moveSpeed = 0.09 + (seed % 50) / 1800;
-  const rawX = width / 2 + (width * 0.3) * Math.cos(t * moveSpeed * 1.1);
-  const rawY = height / 2 + (height * 0.3) * Math.sin(t * moveSpeed * 0.8);
+  const moveSpeed = 0.12 + (seed % 50) / 1500;
+  const rawX = width / 2 + (width * 0.4) * Math.cos(t * moveSpeed * 1.1);
+  const rawY = height / 2 + (height * 0.4) * Math.sin(t * moveSpeed * 0.8);
   
-  const radius = Math.min(width, height) * 0.26 * params.scale;
+  const radius = Math.min(width, height) * 0.38 * params.scale;
   const boundary = applyBoundaryBehavior(rawX, rawY, width, height, radius * 2, 'mandala');
   const centerX = boundary.x;
   const centerY = boundary.y;

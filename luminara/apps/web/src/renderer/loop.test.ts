@@ -68,6 +68,7 @@ test('startLoop animation callback executes render logic', () => {
     translate: vi.fn(),
     rotate: vi.fn(),
     scale: vi.fn(),
+    transform: vi.fn(),
     beginPath: vi.fn(),
     arc: vi.fn(),
     moveTo: vi.fn(),

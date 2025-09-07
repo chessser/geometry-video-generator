@@ -13,6 +13,7 @@ const createMockContext = () => ({
   translate: vi.fn(),
   rotate: vi.fn(),
   scale: vi.fn(),
+  transform: vi.fn(),
   beginPath: vi.fn(),
   arc: vi.fn(),
   stroke: vi.fn(),
@@ -26,6 +27,6 @@ test('renderSeedOfLife renders without errors', () => {
   const params = defaultParams();
   
   expect(() => renderSeedOfLife(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.scale).toHaveBeenCalled();
+  expect(ctx.transform).toHaveBeenCalled();
   expect(ctx.arc).toHaveBeenCalled();
 });
