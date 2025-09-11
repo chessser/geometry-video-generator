@@ -38,29 +38,35 @@ export function renderSacredGeometry(
     return;
   }
 
-  const seed = hashToSeed('pattern-sequence');
-  const multiPatternSeed = hashToSeed('multi-pattern');
+  // Use time-based seed for true randomization
+  const multiPatternSeed = hashToSeed(`multi-${Math.floor(t / 10)}`);
   const rand = multiPatternSeed % 100;
 
   // Decreasing probability for more patterns
   let numPatterns = 1;
-  if (rand < 70)
-    numPatterns = 2; // 70% chance for 2 patterns
-  else if (rand < 85)
-    numPatterns = 3; // 15% chance for 3 patterns
-  else if (rand < 93)
-    numPatterns = 4; // 8% chance for 4 patterns
-  else if (rand < 97)
-    numPatterns = 5; // 4% chance for 5 patterns
-  else if (rand < 99)
-    numPatterns = 6; // 2% chance for 6 patterns
-  else numPatterns = 7; // 1% chance for 7 patterns
+  if (rand < 60)
+    numPatterns = 2; // 60% chance for 2 patterns
+  else if (rand < 80)
+    numPatterns = 3; // 20% chance for 3 patterns
+  else if (rand < 90)
+    numPatterns = 4; // 10% chance for 4 patterns
+  else if (rand < 95)
+    numPatterns = 5; // 5% chance for 5 patterns
+  else if (rand < 98)
+    numPatterns = 6; // 3% chance for 6 patterns
+  else numPatterns = 7; // 2% chance for 7 patterns
 
-  const patternOrder = [...PATTERNS].sort(() => (seed % 1000) / 500 - 1);
+  // Generate truly random pattern selection for each layer
+  const selectedPatterns: PatternType[] = [];
+  for (let i = 0; i < numPatterns; i++) {
+    const patternSeed = hashToSeed(`pattern-${i}-${Math.floor(t / 8)}`);
+    const patternIndex = patternSeed % PATTERNS.length;
+    const pattern = PATTERNS[patternIndex];
+    if (pattern) selectedPatterns.push(pattern);
+  }
 
   for (let i = 0; i < numPatterns; i++) {
-    const patternIndex = (Math.floor(t / PATTERN_DURATION) + i) % patternOrder.length;
-    const pattern = patternOrder[patternIndex];
+    const pattern = selectedPatterns[i];
     if (!pattern) continue;
     const phaseOffset = i * Math.PI * 0.6;
 
