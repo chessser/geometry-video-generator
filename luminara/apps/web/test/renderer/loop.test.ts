@@ -1,5 +1,5 @@
 import { test, expect, vi } from 'vitest';
-import { startLoop } from './loop';
+import { startLoop } from '../../src/renderer/loop';
 
 // Mock requestAnimationFrame
 global.requestAnimationFrame = vi.fn((cb) => {

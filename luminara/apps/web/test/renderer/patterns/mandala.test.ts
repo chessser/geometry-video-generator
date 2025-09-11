@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderPentagram } from './pentagram';
-import { defaultParams } from '../../core/params';
+import { renderMandala } from '../../../src/renderer/patterns/mandala';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -12,21 +12,18 @@ const createMockContext = () => ({
   restore: vi.fn(),
   translate: vi.fn(),
   rotate: vi.fn(),
-  transform: vi.fn(),
   beginPath: vi.fn(),
-  moveTo: vi.fn(),
-  lineTo: vi.fn(),
-  closePath: vi.fn(),
+  arc: vi.fn(),
   stroke: vi.fn(),
   set globalAlpha(_value: number) {},
   set strokeStyle(_value: string) {},
   set lineWidth(_value: number) {},
 });
 
-test('renderPentagram renders without errors', () => {
+test('renderMandala renders without errors', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
 
-  expect(() => renderPentagram(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.stroke).toHaveBeenCalled();
+  expect(() => renderMandala(ctx, params, 1.0, 1.0)).not.toThrow();
+  expect(ctx.arc).toHaveBeenCalled();
 });

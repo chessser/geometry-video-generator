@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderSacredGeometry } from './sacred-geometry';
-import { defaultParams } from '../core/params';
+import { renderSacredGeometry } from '../../src/renderer/sacred-geometry';
+import { defaultParams } from '../../src/core/params';
 
 // Mock hashToSeed
 vi.mock('../core/hash', () => ({

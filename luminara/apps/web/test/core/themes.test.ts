@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { THEMES, getDefaultTheme, type Theme } from './themes';
+import { THEMES, getDefaultTheme, type Theme } from '../../src/core/themes';
 
 test('THEMES contains expected themes', () => {
   expect(THEMES).toHaveProperty('sacred-geometry');

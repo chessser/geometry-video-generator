@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { defaultParams } from './params';
+import { defaultParams } from '../../src/core/params';
 
 describe('defaultParams', () => {
   it('should return valid default parameters', () => {

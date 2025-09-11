@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderTreeOfLife } from './tree-of-life';
-import { defaultParams } from '../../core/params';
+import { renderSeedOfLife } from '../../../src/renderer/patterns/seed-of-life';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -12,21 +12,21 @@ const createMockContext = () => ({
   restore: vi.fn(),
   translate: vi.fn(),
   rotate: vi.fn(),
+  scale: vi.fn(),
+  transform: vi.fn(),
   beginPath: vi.fn(),
   arc: vi.fn(),
-  moveTo: vi.fn(),
-  lineTo: vi.fn(),
   stroke: vi.fn(),
   set globalAlpha(_value: number) {},
   set strokeStyle(_value: string) {},
   set lineWidth(_value: number) {},
 });
 
-test('renderTreeOfLife renders without errors', () => {
+test('renderSeedOfLife renders without errors', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
 
-  expect(() => renderTreeOfLife(ctx, params, 1.0, 1.0)).not.toThrow();
+  expect(() => renderSeedOfLife(ctx, params, 1.0, 1.0)).not.toThrow();
+  expect(ctx.transform).toHaveBeenCalled();
   expect(ctx.arc).toHaveBeenCalled();
-  expect(ctx.lineTo).toHaveBeenCalled();
 });

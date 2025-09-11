@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderMandala } from './mandala';
-import { defaultParams } from '../../core/params';
+import { renderVesicaPiscis } from '../../../src/renderer/patterns/vesica-piscis';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -12,6 +12,7 @@ const createMockContext = () => ({
   restore: vi.fn(),
   translate: vi.fn(),
   rotate: vi.fn(),
+  transform: vi.fn(),
   beginPath: vi.fn(),
   arc: vi.fn(),
   stroke: vi.fn(),
@@ -20,10 +21,10 @@ const createMockContext = () => ({
   set lineWidth(_value: number) {},
 });
 
-test('renderMandala renders without errors', () => {
+test('renderVesicaPiscis renders without errors', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
 
-  expect(() => renderMandala(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.arc).toHaveBeenCalled();
+  expect(() => renderVesicaPiscis(ctx, params, 1.0, 1.0)).not.toThrow();
+  expect(ctx.arc).toHaveBeenCalledTimes(2);
 });

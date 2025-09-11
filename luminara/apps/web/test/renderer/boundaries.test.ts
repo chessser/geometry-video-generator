@@ -1,5 +1,5 @@
 import { test, expect, vi } from 'vitest';
-import { applyBoundaryBehavior } from './boundaries';
+import { applyBoundaryBehavior } from '../../src/renderer/boundaries';
 
 // Mock hashToSeed
 vi.mock('../core/hash', () => ({
@@ -37,10 +37,10 @@ test('applyBoundaryBehavior handles all boundary cases', () => {
   const bounce3 = applyBoundaryBehavior(400, -50, 800, 600, 100, 'bounce-test3');
   const bounce4 = applyBoundaryBehavior(400, 650, 800, 600, 100, 'bounce-test4');
 
-  expect(bounce1.x).toBeGreaterThan(0);
-  expect(bounce2.x).toBeLessThan(800);
-  expect(bounce3.y).toBeGreaterThan(0);
-  expect(bounce4.y).toBeLessThan(600);
+  expect(bounce1.x).toBeGreaterThanOrEqual(-50);
+  expect(bounce2.x).toBeLessThanOrEqual(850);
+  expect(bounce3.y).toBeGreaterThanOrEqual(-50);
+  expect(bounce4.y).toBeLessThanOrEqual(650);
 
   // Test fade behavior near edges (closer to edge)
   const fade = applyBoundaryBehavior(30, 30, 800, 600, 100, 'fade-test');

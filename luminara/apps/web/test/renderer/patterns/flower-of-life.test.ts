@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderFlowerOfLife } from './flower-of-life';
-import { defaultParams } from '../../core/params';
+import { renderFlowerOfLife } from '../../../src/renderer/patterns/flower-of-life';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -30,4 +30,20 @@ test('renderFlowerOfLife renders without errors', () => {
   expect(ctx.save).toHaveBeenCalled();
   expect(ctx.restore).toHaveBeenCalled();
   expect(ctx.arc).toHaveBeenCalled();
+});
+
+test('renderFlowerOfLife changes circle count over time', () => {
+  const ctx = createMockContext() as any;
+  const params = defaultParams();
+  
+  const arcCounts = [];
+  for (let t = 0; t < 40; t += 10) {
+    ctx.arc.mockClear();
+    renderFlowerOfLife(ctx, params, t, 1.0);
+    arcCounts.push(ctx.arc.mock.calls.length);
+  }
+  
+  const uniqueCounts = [...new Set(arcCounts)];
+  expect(uniqueCounts.length).toBeGreaterThan(1);
+  expect(uniqueCounts.every(count => [7, 19, 37, 61].includes(count))).toBe(true);
 });

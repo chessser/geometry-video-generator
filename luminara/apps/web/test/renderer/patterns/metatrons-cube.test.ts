@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderMetatronsCube } from './metatrons-cube';
-import { defaultParams } from '../../core/params';
+import { renderMetatronsCube } from '../../../src/renderer/patterns/metatrons-cube';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),

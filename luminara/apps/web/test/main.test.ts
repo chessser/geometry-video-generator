@@ -1,18 +1,27 @@
 import { test, expect, vi } from 'vitest';
 
 // Mock DOM and modules
-const mockCanvas = {
+const mockElement = {
   style: {},
   width: 0,
   height: 0,
+  textContent: '',
+  value: '',
+  selected: false,
+  getContext: vi.fn(() => ({})),
+  appendChild: vi.fn(),
+  addEventListener: vi.fn(),
 };
+
+const mockCanvas = mockElement;
 
 const mockRoot = {
   replaceChildren: vi.fn(),
+  appendChild: vi.fn(),
 };
 
 global.document = {
-  createElement: vi.fn(() => mockCanvas),
+  createElement: vi.fn(() => mockElement),
   getElementById: vi.fn(() => mockRoot),
 } as any;
 
@@ -22,20 +31,22 @@ global.window = {
   addEventListener: vi.fn(),
 } as any;
 
-vi.mock('./renderer/loop', () => ({
+global.requestAnimationFrame = vi.fn();
+
+vi.mock('../src/renderer/loop', () => ({
   startLoop: vi.fn(),
 }));
 
-vi.mock('./ui/panel', () => ({
+vi.mock('../src/ui/panel', () => ({
   attachPanel: vi.fn(),
 }));
 
 test('main initializes canvas and starts app', async () => {
-  const { startLoop } = await import('./renderer/loop');
-  const { attachPanel } = await import('./ui/panel');
+  const { startLoop } = await import('../src/renderer/loop');
+  const { attachPanel } = await import('../src/ui/panel');
 
   // Import main to trigger initialization
-  await import('./main');
+  await import('../src/main');
 
   expect(document.getElementById).toHaveBeenCalledWith('app');
   expect(document.createElement).toHaveBeenCalledWith('canvas');
@@ -45,7 +56,7 @@ test('main initializes canvas and starts app', async () => {
 });
 
 test('main sets up resize listener', async () => {
-  await import('./main');
+  await import('../src/main');
 
   expect(window.addEventListener).toHaveBeenCalledWith('resize', expect.any(Function));
 });
@@ -54,7 +65,7 @@ test('resize handler updates canvas dimensions', async () => {
   global.window.innerWidth = 1920;
   global.window.innerHeight = 1080;
 
-  await import('./main');
+  await import('../src/main');
 
   // Get the resize handler
   const resizeHandler = (window.addEventListener as any).mock.calls.find(

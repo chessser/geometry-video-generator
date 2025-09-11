@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderGoldenSpiral } from './golden-spiral';
-import { defaultParams } from '../../core/params';
+import { renderSriYantra } from '../../../src/renderer/patterns/sri-yantra';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -12,21 +12,22 @@ const createMockContext = () => ({
   restore: vi.fn(),
   translate: vi.fn(),
   rotate: vi.fn(),
-  transform: vi.fn(),
+  scale: vi.fn(),
   beginPath: vi.fn(),
   moveTo: vi.fn(),
   lineTo: vi.fn(),
+  closePath: vi.fn(),
   stroke: vi.fn(),
   set globalAlpha(_value: number) {},
   set strokeStyle(_value: string) {},
   set lineWidth(_value: number) {},
 });
 
-test('renderGoldenSpiral renders without errors', () => {
+test('renderSriYantra renders without errors', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
 
-  expect(() => renderGoldenSpiral(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.moveTo).toHaveBeenCalled();
-  expect(ctx.lineTo).toHaveBeenCalled();
+  expect(() => renderSriYantra(ctx, params, 1.0, 1.0)).not.toThrow();
+  expect(ctx.scale).toHaveBeenCalled();
+  expect(ctx.closePath).toHaveBeenCalled();
 });

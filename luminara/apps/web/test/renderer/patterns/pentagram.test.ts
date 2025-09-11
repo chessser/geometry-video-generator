@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderVesicaPiscis } from './vesica-piscis';
-import { defaultParams } from '../../core/params';
+import { renderPentagram } from '../../../src/renderer/patterns/pentagram';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -14,17 +14,19 @@ const createMockContext = () => ({
   rotate: vi.fn(),
   transform: vi.fn(),
   beginPath: vi.fn(),
-  arc: vi.fn(),
+  moveTo: vi.fn(),
+  lineTo: vi.fn(),
+  closePath: vi.fn(),
   stroke: vi.fn(),
   set globalAlpha(_value: number) {},
   set strokeStyle(_value: string) {},
   set lineWidth(_value: number) {},
 });
 
-test('renderVesicaPiscis renders without errors', () => {
+test('renderPentagram renders without errors', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
 
-  expect(() => renderVesicaPiscis(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.arc).toHaveBeenCalledTimes(2);
+  expect(() => renderPentagram(ctx, params, 1.0, 1.0)).not.toThrow();
+  expect(ctx.stroke).toHaveBeenCalled();
 });

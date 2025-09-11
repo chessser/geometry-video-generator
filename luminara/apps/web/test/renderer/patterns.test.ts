@@ -4,8 +4,8 @@ import {
   renderSeedOfLife,
   renderMetatronsCube,
   renderSriYantra,
-} from './patterns';
-import { defaultParams } from '../core/params';
+} from '../../src/renderer/patterns';
+import { defaultParams } from '../../src/core/params';
 
 // Mock hashToSeed
 vi.mock('../core/hash', () => ({

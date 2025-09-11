@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderHexagram } from './hexagram';
-import { defaultParams } from '../../core/params';
+import { renderTreeOfLife } from '../../../src/renderer/patterns/tree-of-life';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -13,19 +13,20 @@ const createMockContext = () => ({
   translate: vi.fn(),
   rotate: vi.fn(),
   beginPath: vi.fn(),
+  arc: vi.fn(),
   moveTo: vi.fn(),
   lineTo: vi.fn(),
-  closePath: vi.fn(),
   stroke: vi.fn(),
   set globalAlpha(_value: number) {},
   set strokeStyle(_value: string) {},
   set lineWidth(_value: number) {},
 });
 
-test('renderHexagram renders without errors', () => {
+test('renderTreeOfLife renders without errors', () => {
   const ctx = createMockContext() as any;
   const params = defaultParams();
 
-  expect(() => renderHexagram(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.closePath).toHaveBeenCalledTimes(2);
+  expect(() => renderTreeOfLife(ctx, params, 1.0, 1.0)).not.toThrow();
+  expect(ctx.arc).toHaveBeenCalled();
+  expect(ctx.lineTo).toHaveBeenCalled();
 });

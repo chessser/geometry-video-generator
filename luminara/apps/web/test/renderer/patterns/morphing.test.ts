@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderMorphingPattern } from './morphing';
-import { defaultParams } from '../../core/params';
+import { renderMorphingPattern } from '../../../src/renderer/patterns/morphing';
+import { defaultParams } from '../../../src/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),

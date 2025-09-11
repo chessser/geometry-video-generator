@@ -48,11 +48,11 @@ export function setupPattern(
     rawY = height / 2 + orbitRadius * Math.sin(t * moveSpeed) + wobble * height * 0.1;
   }
 
-  // Enhanced size calculation with multiple oscillations
-  const pulse = 0.6 + 0.6 * Math.sin(t * config.pulseRate + seed);
-  const breathe = 0.7 + 0.5 * Math.sin(t * (config.pulseRate * 1.4) + seed * 2);
-  const throb = 0.9 + 0.2 * Math.sin(t * (config.pulseRate * 2.1) + seed * 3);
-  const size = Math.min(width, height) * config.size * params.scale * pulse * breathe * throb;
+  // Size calculation with minimum threshold
+  const pulse = 0.8 + 0.4 * Math.sin(t * config.pulseRate + seed);
+  const breathe = 0.9 + 0.2 * Math.sin(t * (config.pulseRate * 1.2) + seed * 2);
+  const baseSize = Math.min(width, height) * config.size * params.scale;
+  const size = Math.max(baseSize * 0.6, baseSize * pulse * breathe);
 
   // Boundary behavior
   const boundary = applyBoundaryBehavior(rawX, rawY, width, height, size * 2, config.id);
@@ -67,19 +67,14 @@ export function setupPattern(
 
   ctx.translate(boundary.x + misalignX, boundary.y + misalignY);
 
-  // Enhanced rotation with acceleration and deceleration
-  const rotationSpeed = config.rotationRate * (1 + 0.5 * Math.sin(t * 0.2 + seed));
-  const rotation = t * rotationSpeed + params.angle + seed * 0.01;
+  // Smooth constant rotation
+  const rotation = t * config.rotationRate + params.angle;
   ctx.rotate(rotation);
 
-  // Enhanced distortion effects
-  const skewX = 0.25 * Math.sin(t * 0.4 + seed) * Math.cos(t * 0.15);
-  const skewY = 0.2 * Math.cos(t * 0.5 + seed * 1.5) * Math.sin(t * 0.12);
-  const scaleX = 1 + 0.3 * Math.sin(t * 0.3 + seed * 0.7) + 0.1 * Math.cos(t * 0.8);
-  const scaleY = 1 + 0.25 * Math.cos(t * 0.4 + seed * 1.2) + 0.1 * Math.sin(t * 0.9);
-  const shearX = 0.1 * Math.sin(t * 0.6 + seed * 2);
-  const shearY = 0.08 * Math.cos(t * 0.7 + seed * 2.5);
-  ctx.transform(scaleX, skewX + shearX, skewY + shearY, scaleY, 0, 0);
+  // Minimal distortion effects
+  const skewX = 0.05 * Math.sin(t * 0.2 + seed);
+  const skewY = 0.04 * Math.cos(t * 0.25 + seed);
+  ctx.transform(1, skewX, skewY, 1, 0, 0);
 
   // Enhanced color setup with dynamic cycling
   const hueSpeed = 50 + (seed % 40);
@@ -90,10 +85,11 @@ export function setupPattern(
   const lightness = lightnessBase + 15 * Math.cos(t * 0.6 + seed * 1.3);
   ctx.strokeStyle = `hsl(${hue}, ${Math.max(30, Math.min(100, saturation))}%, ${Math.max(20, Math.min(80, lightness))}%)`;
 
-  // Moderate line thickness variation
-  const thicknessPulse = 1.5 + 2 * Math.sin(t * (0.7 + (seed % 5) * 0.1));
-  const thicknessWave = 1 + 1.5 * Math.cos(t * (1.2 + (seed % 3) * 0.15));
-  const thickness = thicknessPulse * thicknessWave + (seed % 4) * 0.3;
+  // Size-based thickness with variation
+  const sizeRatio = size / (Math.min(width, height) * config.size);
+  const baseThickness = 1 + sizeRatio * 2;
+  const thicknessPulse = 1 + 0.5 * Math.sin(t * (0.5 + (seed % 3) * 0.1));
+  const thickness = baseThickness * thicknessPulse;
   ctx.lineWidth = Math.max(0.8, thickness);
 
   return { size, seed, hue };

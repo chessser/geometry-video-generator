@@ -27,7 +27,7 @@ const PATTERNS: PatternType[] = [
   'pentagram',
 ];
 const PATTERN_DURATION = 20;
-const FADE_DURATION = 6;
+const FADE_DURATION = 3;
 
 export function renderSacredGeometry(
   ctx: CanvasRenderingContext2D,
