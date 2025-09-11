@@ -1,6 +1,6 @@
-import type { Params } from '../../core/params';
-import { hashToSeed } from '../../core/hash';
-import { applyBoundaryBehavior } from '../boundaries';
+import type { Params } from '@/core/params';
+import { setupPattern, finishPattern } from './pattern-base';
+import { PATTERN_DEFAULTS } from './pattern-constants';
 
 export function renderTreeOfLife(
   ctx: CanvasRenderingContext2D,
@@ -8,40 +8,26 @@ export function renderTreeOfLife(
   t: number,
   alpha: number = 1,
 ) {
-  const { width, height } = ctx.canvas;
-  const seed = hashToSeed('tree-position');
-  const moveSpeed = 0.11 + (seed % 60) / 1400;
-  const rawX = width / 2 + width * 0.35 * Math.cos(t * moveSpeed);
-  const rawY = height / 2 + height * 0.3 * Math.sin(t * moveSpeed * 1.3);
-
-  const size = Math.min(width, height) * 0.3 * params.scale;
-  const boundary = applyBoundaryBehavior(rawX, rawY, width, height, size * 2, 'tree-of-life');
-  const centerX = boundary.x;
-  const centerY = boundary.y;
-  alpha *= boundary.alpha;
-
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.translate(centerX, centerY);
-  ctx.rotate(t * 0.05);
-
-  const hue = (t * 30 + 60) % 360;
-  ctx.strokeStyle = `hsl(${hue}, 75%, 65%)`;
-  ctx.lineWidth = 1.5 + 0.5 * Math.sin(t * 0.6);
+  const { size, hue } = setupPattern(ctx, params, t, alpha, {
+    id: 'tree-of-life',
+    ...PATTERN_DEFAULTS,
+    hueBase: 60,
+  });
 
   const sephirot = [
-    [0, -size * 0.8],
-    [0, size * 0.8],
-    [-size * 0.4, -size * 0.4],
-    [size * 0.4, -size * 0.4],
-    [-size * 0.4, 0],
-    [size * 0.4, 0],
-    [-size * 0.4, size * 0.4],
-    [size * 0.4, size * 0.4],
-    [0, -size * 0.2],
-    [0, size * 0.2],
+    [0, -size * 0.9], // 0: Kether (Crown)
+    [-size * 0.35, -size * 0.5], // 1: Chokmah (Wisdom)
+    [size * 0.35, -size * 0.5], // 2: Binah (Understanding)
+    [-size * 0.35, -size * 0.1], // 3: Chesed (Mercy)
+    [size * 0.35, -size * 0.1], // 4: Geburah (Severity)
+    [0, -size * 0.1], // 5: Tiphereth (Beauty)
+    [-size * 0.35, size * 0.3], // 6: Netzach (Victory)
+    [size * 0.35, size * 0.3], // 7: Hod (Glory)
+    [0, size * 0.3], // 8: Yesod (Foundation)
+    [0, size * 0.7], // 9: Malkuth (Kingdom)
   ];
 
+  ctx.strokeStyle = `hsl(${hue}, 75%, 65%)`;
   sephirot.forEach(([x, y], i) => {
     const circleSize = size * 0.08 * (0.8 + 0.4 * Math.sin(t * 0.3 + i));
     ctx.beginPath();
@@ -50,19 +36,29 @@ export function renderTreeOfLife(
   });
 
   const connections = [
-    [0, 8],
-    [8, 2],
+    [0, 1],
+    [0, 2],
+    [0, 5], // Kether connections
+    [1, 2],
+    [1, 3],
+    [1, 5], // Chokmah connections
     [2, 4],
-    [4, 6],
-    [6, 9],
-    [9, 7],
-    [7, 5],
-    [5, 3],
-    [3, 8],
-    [8, 9],
-    [2, 3],
+    [2, 5], // Binah connections
+    [3, 4],
+    [3, 5],
+    [3, 6], // Chesed connections
     [4, 5],
+    [4, 7], // Geburah connections
+    [5, 6],
+    [5, 7],
+    [5, 8],
+    [5, 9], // Tiphereth connections
     [6, 7],
+    [6, 8],
+    [6, 9], // Netzach connections
+    [7, 8],
+    [7, 9], // Hod connections
+    [8, 9], // Yesod to Malkuth
   ];
   connections.forEach(([a, b]) => {
     ctx.beginPath();
@@ -71,5 +67,5 @@ export function renderTreeOfLife(
     ctx.stroke();
   });
 
-  ctx.restore();
+  finishPattern(ctx);
 }

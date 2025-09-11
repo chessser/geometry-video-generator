@@ -1,5 +1,5 @@
 import { test, expect, vi } from 'vitest';
-import { startLoop } from '../../src/renderer/loop';
+import { startLoop } from '../../src';
 
 // Mock requestAnimationFrame
 global.requestAnimationFrame = vi.fn((cb) => {
@@ -152,4 +152,29 @@ test('startLoop handles individual pattern themes', () => {
   animationCallback!(16.67);
 
   expect(mockCtx.clearRect).toHaveBeenCalled();
+});
+
+test('startLoop handles fallback theme', () => {
+  const mockCtx = {
+    fillStyle: '',
+    fillRect: vi.fn(),
+  };
+
+  const canvas = {
+    getContext: vi.fn(() => mockCtx),
+    width: 800,
+    height: 600,
+  } as any;
+
+  let animationCallback: Function;
+  global.requestAnimationFrame = vi.fn((cb) => {
+    animationCallback = cb;
+    return 1;
+  });
+
+  const params = { theme: 'unknown-theme' };
+  startLoop(canvas, params);
+  animationCallback!(1000);
+
+  expect(mockCtx.fillRect).toHaveBeenCalledWith(0, 0, 800, 600);
 });

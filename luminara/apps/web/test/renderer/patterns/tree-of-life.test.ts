@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderTreeOfLife } from '../../../src/renderer/patterns/tree-of-life';
-import { defaultParams } from '../../../src/core/params';
+import { renderTreeOfLife } from '@/renderer/patterns/tree-of-life';
+import { defaultParams } from '@/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -12,6 +12,7 @@ const createMockContext = () => ({
   restore: vi.fn(),
   translate: vi.fn(),
   rotate: vi.fn(),
+  transform: vi.fn(),
   beginPath: vi.fn(),
   arc: vi.fn(),
   moveTo: vi.fn(),

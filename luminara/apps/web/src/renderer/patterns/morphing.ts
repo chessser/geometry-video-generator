@@ -1,4 +1,4 @@
-import type { Params } from '../../core/params';
+import type { Params } from '@/core/params';
 import { setupPattern, finishPattern } from './pattern-base';
 
 export function renderMorphingPattern(

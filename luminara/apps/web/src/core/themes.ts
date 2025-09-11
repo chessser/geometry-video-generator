@@ -9,10 +9,7 @@ export type Theme =
   | 'sri-yantra'
   | 'vesica-piscis'
   | 'tree-of-life'
-  | 'golden-spiral'
-  | 'mandala'
-  | 'hexagram'
-  | 'pentagram';
+  | 'golden-spiral';
 
 export const THEMES: Record<Theme, string> = {
   'sacred-geometry': 'Sacred Geometry',
@@ -26,9 +23,6 @@ export const THEMES: Record<Theme, string> = {
   'vesica-piscis': '└ Vesica Piscis',
   'tree-of-life': '└ Tree of Life',
   'golden-spiral': '└ Golden Spiral',
-  mandala: '└ Mandala',
-  hexagram: '└ Hexagram',
-  pentagram: '└ Pentagram',
 };
 
 export function getDefaultTheme(): Theme {

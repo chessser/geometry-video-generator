@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderVesicaPiscis } from '../../../src/renderer/patterns/vesica-piscis';
-import { defaultParams } from '../../../src/core/params';
+import { renderVesicaPiscis } from '@/renderer/patterns/vesica-piscis';
+import { defaultParams } from '@/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),

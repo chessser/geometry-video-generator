@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { hashToSeed } from '../../src/core/hash';
+import { hashToSeed } from '@/core/hash';
 
 test('hashToSeed returns consistent results', () => {
   expect(hashToSeed('test')).toBe(hashToSeed('test'));

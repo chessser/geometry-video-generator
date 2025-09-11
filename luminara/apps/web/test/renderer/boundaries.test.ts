@@ -1,5 +1,5 @@
 import { test, expect, vi } from 'vitest';
-import { applyBoundaryBehavior } from '../../src/renderer/boundaries';
+import { applyBoundaryBehavior } from '@/renderer/boundaries';
 
 // Mock hashToSeed
 vi.mock('../core/hash', () => ({

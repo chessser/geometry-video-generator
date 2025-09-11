@@ -5,10 +5,7 @@ export type PatternType =
   | 'sri-yantra'
   | 'vesica-piscis'
   | 'tree-of-life'
-  | 'golden-spiral'
-  | 'mandala'
-  | 'hexagram'
-  | 'pentagram';
+  | 'golden-spiral';
 
 // Re-export all pattern functions
 export { renderFlowerOfLife } from './flower-of-life';
@@ -18,6 +15,3 @@ export { renderSriYantra } from './sri-yantra';
 export { renderVesicaPiscis } from './vesica-piscis';
 export { renderTreeOfLife } from './tree-of-life';
 export { renderGoldenSpiral } from './golden-spiral';
-export { renderMandala } from './mandala';
-export { renderHexagram } from './hexagram';
-export { renderPentagram } from './pentagram';

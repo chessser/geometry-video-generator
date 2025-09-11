@@ -1,6 +1,6 @@
-import type { Params } from '../../core/params';
-import { hashToSeed } from '../../core/hash';
-import { applyBoundaryBehavior } from '../boundaries';
+import type { Params } from '@/core/params';
+import { hashToSeed } from '@/core/hash';
+import { applyBoundaryBehavior } from '@/renderer/boundaries';
 
 export interface PatternConfig {
   id: string;
@@ -10,6 +10,7 @@ export interface PatternConfig {
   pulseRate: number;
   rotationRate: number;
   hueBase: number;
+  movementType?: 'auto' | 'circular';
 }
 
 export function setupPattern(
@@ -22,30 +23,39 @@ export function setupPattern(
   const { width, height } = ctx.canvas;
   const seed = hashToSeed(config.id);
 
-  // Enhanced movement calculation with figure-8 and spiral patterns
+  // Movement calculation
   const moveSpeed = config.moveSpeed + (seed % 100) / 600;
-  const movePattern = seed % 4;
   let rawX, rawY;
 
-  if (movePattern === 0) {
-    // Figure-8 pattern
-    rawX = width / 2 + width * config.movementRange * Math.sin(t * moveSpeed * 2);
-    rawY = height / 2 + height * config.movementRange * 0.7 * Math.sin(t * moveSpeed);
-  } else if (movePattern === 1) {
-    // Spiral pattern
-    const spiralRadius = width * config.movementRange * (0.3 + 0.4 * Math.sin(t * moveSpeed * 0.3));
-    rawX = width / 2 + spiralRadius * Math.cos(t * moveSpeed * 1.5);
-    rawY = height / 2 + spiralRadius * Math.sin(t * moveSpeed * 1.5);
-  } else if (movePattern === 2) {
-    // Lissajous curve
-    rawX = width / 2 + width * config.movementRange * Math.sin(t * moveSpeed * 1.2);
-    rawY = height / 2 + height * config.movementRange * Math.sin(t * moveSpeed * 1.7);
+  if (config.movementType === 'circular') {
+    // Simple circular movement
+    rawX = width / 2 + width * config.movementRange * Math.cos(t * moveSpeed);
+    rawY = height / 2 + height * config.movementRange * Math.sin(t * moveSpeed);
   } else {
-    // Orbital with wobble
-    const orbitRadius = width * config.movementRange * (0.8 + 0.3 * Math.sin(t * moveSpeed * 0.5));
-    const wobble = 0.2 * Math.sin(t * moveSpeed * 3);
-    rawX = width / 2 + orbitRadius * Math.cos(t * moveSpeed) + wobble * width * 0.1;
-    rawY = height / 2 + orbitRadius * Math.sin(t * moveSpeed) + wobble * height * 0.1;
+    // Auto movement patterns based on seed
+    const movePattern = seed % 4;
+    if (movePattern === 0) {
+      // Figure-8 pattern
+      rawX = width / 2 + width * config.movementRange * Math.sin(t * moveSpeed * 2);
+      rawY = height / 2 + height * config.movementRange * 0.7 * Math.sin(t * moveSpeed);
+    } else if (movePattern === 1) {
+      // Spiral pattern
+      const spiralRadius =
+        width * config.movementRange * (0.3 + 0.4 * Math.sin(t * moveSpeed * 0.3));
+      rawX = width / 2 + spiralRadius * Math.cos(t * moveSpeed * 1.5);
+      rawY = height / 2 + spiralRadius * Math.sin(t * moveSpeed * 1.5);
+    } else if (movePattern === 2) {
+      // Lissajous curve
+      rawX = width / 2 + width * config.movementRange * Math.sin(t * moveSpeed * 1.2);
+      rawY = height / 2 + height * config.movementRange * Math.sin(t * moveSpeed * 1.7);
+    } else {
+      // Orbital with wobble
+      const orbitRadius =
+        width * config.movementRange * (0.8 + 0.3 * Math.sin(t * moveSpeed * 0.5));
+      const wobble = 0.2 * Math.sin(t * moveSpeed * 3);
+      rawX = width / 2 + orbitRadius * Math.cos(t * moveSpeed) + wobble * width * 0.1;
+      rawY = height / 2 + orbitRadius * Math.sin(t * moveSpeed) + wobble * height * 0.1;
+    }
   }
 
   // Size calculation with minimum threshold
@@ -116,4 +126,45 @@ export function shouldUseChaos(seed: number, chaosType: 'drift' | 'thickness' | 
   if (chaosType === 'drift') return rand < 70;
   if (chaosType === 'thickness') return rand < 80;
   return rand < 60; // both
+}
+
+export function getGrowthCycle(t: number, speed: number = 0.03) {
+  return (t * speed) % 1;
+}
+
+export function getGrowthStage(cycle: number, stages: number) {
+  return Math.floor(cycle * stages);
+}
+
+export function getFadeAlpha(
+  cycle: number,
+  elementIndex: number,
+  stageBreakpoints: number[],
+  fadeZone: number = 0.1,
+) {
+  for (let i = 0; i < stageBreakpoints.length; i++) {
+    const stageStart = stageBreakpoints[i];
+    const cyclePoint = (i + 1) / stageBreakpoints.length;
+
+    if (
+      elementIndex >= stageStart &&
+      cycle >= cyclePoint - fadeZone &&
+      cycle < cyclePoint + fadeZone
+    ) {
+      return Math.min(1, (cycle - (cyclePoint - fadeZone)) / (fadeZone * 2));
+    }
+  }
+  return 1;
+}
+
+export function drawElementWithFade(
+  ctx: CanvasRenderingContext2D,
+  drawFn: () => void,
+  baseAlpha: number,
+  fadeAlpha: number,
+) {
+  const originalAlpha = ctx.globalAlpha;
+  ctx.globalAlpha = baseAlpha * fadeAlpha;
+  drawFn();
+  ctx.globalAlpha = originalAlpha;
 }

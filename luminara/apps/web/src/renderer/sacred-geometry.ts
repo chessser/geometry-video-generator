@@ -1,4 +1,4 @@
-import type { Params } from '../core/params';
+import type { Params } from '@/core/params';
 import {
   renderFlowerOfLife,
   renderSeedOfLife,
@@ -7,14 +7,11 @@ import {
   renderVesicaPiscis,
   renderTreeOfLife,
   renderGoldenSpiral,
-  renderMandala,
-  renderHexagram,
-  renderPentagram,
   type PatternType,
 } from './patterns';
-import { hashToSeed } from '../core/hash';
+import { hashToSeed } from '@/core/hash';
 
-const PATTERNS: PatternType[] = [
+export const PATTERNS: PatternType[] = [
   'flower-of-life',
   'seed-of-life',
   'metatrons-cube',
@@ -22,9 +19,6 @@ const PATTERNS: PatternType[] = [
   'vesica-piscis',
   'tree-of-life',
   'golden-spiral',
-  'mandala',
-  'hexagram',
-  'pentagram',
 ];
 const PATTERN_DURATION = 20;
 const FADE_DURATION = 3;
@@ -118,15 +112,6 @@ function renderPattern(
       break;
     case 'golden-spiral':
       renderGoldenSpiral(ctx, params, t, alpha);
-      break;
-    case 'mandala':
-      renderMandala(ctx, params, t, alpha);
-      break;
-    case 'hexagram':
-      renderHexagram(ctx, params, t, alpha);
-      break;
-    case 'pentagram':
-      renderPentagram(ctx, params, t, alpha);
       break;
   }
 }

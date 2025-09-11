@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { hashToSeed } from '../../src/core/hash';
+import { hashToSeed } from '@/core/hash';
 
 // Future test for deterministic generation
 test('same text input produces same visual parameters', () => {

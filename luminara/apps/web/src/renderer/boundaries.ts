@@ -1,4 +1,4 @@
-import { hashToSeed } from '../core/hash';
+import { hashToSeed } from '@/core/hash';
 
 export type BoundaryBehavior = 'bounce' | 'wrap' | 'fade';
 

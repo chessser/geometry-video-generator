@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderGoldenSpiral } from '../../../src/renderer/patterns/golden-spiral';
-import { defaultParams } from '../../../src/core/params';
+import { renderGoldenSpiral } from '@/renderer/patterns/golden-spiral';
+import { defaultParams } from '@/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),

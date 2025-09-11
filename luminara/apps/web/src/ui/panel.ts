@@ -1,4 +1,4 @@
-import { THEMES } from '../core/themes';
+import { THEMES } from '@/core/themes';
 
 export function attachPanel(root: HTMLElement, onThemeChange?: (theme: string) => void) {
   const panel = document.createElement('div');

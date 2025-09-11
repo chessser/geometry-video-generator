@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderMetatronsCube } from '../../../src/renderer/patterns/metatrons-cube';
-import { defaultParams } from '../../../src/core/params';
+import { renderMetatronsCube } from '@/renderer/patterns/metatrons-cube';
+import { defaultParams } from '@/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -28,7 +28,8 @@ test('renderMetatronsCube renders without errors', () => {
   const params = defaultParams();
 
   expect(() => renderMetatronsCube(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.transform).toHaveBeenCalled();
+  expect(ctx.arc).toHaveBeenCalled();
+  expect(ctx.lineTo).toHaveBeenCalled();
 });
 
 test('renderMetatronsCube handles different time values', () => {
@@ -52,5 +53,5 @@ test('renderMetatronsCube covers all movement path branches', () => {
     expect(() => renderMetatronsCube(ctx, params, i * 0.5, 1.0)).not.toThrow();
   }
 
-  expect(ctx.transform).toHaveBeenCalled();
+  expect(ctx.arc).toHaveBeenCalled();
 });

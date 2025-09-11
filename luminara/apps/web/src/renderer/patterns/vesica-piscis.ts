@@ -1,4 +1,4 @@
-import type { Params } from '../../core/params';
+import type { Params } from '@/core/params';
 import {
   setupPattern,
   finishPattern,
@@ -6,6 +6,7 @@ import {
   getChaosThickness,
   shouldUseChaos,
 } from './pattern-base';
+import { PATTERN_DEFAULTS } from './pattern-constants';
 
 export function renderVesicaPiscis(
   ctx: CanvasRenderingContext2D,
@@ -15,11 +16,7 @@ export function renderVesicaPiscis(
 ) {
   const { size, seed } = setupPattern(ctx, params, t, alpha, {
     id: 'vesica-piscis',
-    moveSpeed: 0.13,
-    size: 0.4,
-    movementRange: 0.4,
-    pulseRate: 0.7,
-    rotationRate: 0.15,
+    ...PATTERN_DEFAULTS,
     hueBase: 180,
   });
 

@@ -1,5 +1,5 @@
 import { test, expect, vi } from 'vitest';
-import { attachPanel } from '../../src/ui/panel';
+import { attachPanel } from '@/ui/panel';
 
 // Mock DOM
 const createMockElement = (tagName: string) => ({

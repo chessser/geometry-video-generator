@@ -42,8 +42,8 @@ vi.mock('../src/ui/panel', () => ({
 }));
 
 test('main initializes canvas and starts app', async () => {
-  const { startLoop } = await import('../src/renderer/loop');
-  const { attachPanel } = await import('../src/ui/panel');
+  const { startLoop } = await import('../src');
+  const { attachPanel } = await import('../src');
 
   // Import main to trigger initialization
   await import('../src/main');

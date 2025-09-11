@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest';
-import { THEMES, getDefaultTheme, type Theme } from '../../src/core/themes';
+import { THEMES, getDefaultTheme, type Theme } from '@/core/themes';
 
 test('THEMES contains expected themes', () => {
   expect(THEMES).toHaveProperty('sacred-geometry');
@@ -21,14 +21,26 @@ test('THEMES includes all individual patterns', () => {
     'vesica-piscis',
     'tree-of-life',
     'golden-spiral',
-    'mandala',
-    'hexagram',
-    'pentagram',
   ];
 
   patterns.forEach((pattern) => {
     expect(THEMES).toHaveProperty(pattern);
     expect(THEMES[pattern as keyof typeof THEMES]).toContain('└');
+  });
+});
+
+test('themes align with actual pattern implementations', async () => {
+  const { PATTERNS } = await import('@/renderer/sacred-geometry');
+  const patternThemes = Object.keys(THEMES).filter(key => key !== 'sacred-geometry' && key !== 'fractals' && key !== 'organic' && key !== 'minimal');
+  
+  // Every pattern theme should have a corresponding pattern implementation
+  patternThemes.forEach(theme => {
+    expect(PATTERNS).toContain(theme);
+  });
+  
+  // Every pattern implementation should have a corresponding theme
+  PATTERNS.forEach((pattern: string) => {
+    expect(THEMES).toHaveProperty(pattern);
   });
 });
 
@@ -52,9 +64,6 @@ test('all theme keys are valid Theme types', () => {
     'vesica-piscis',
     'tree-of-life',
     'golden-spiral',
-    'mandala',
-    'hexagram',
-    'pentagram',
   ];
 
   Object.keys(THEMES).forEach((key) => {

@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderSriYantra } from '../../../src/renderer/patterns/sri-yantra';
-import { defaultParams } from '../../../src/core/params';
+import { renderSriYantra } from '@/renderer/patterns/sri-yantra';
+import { defaultParams } from '@/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
@@ -13,6 +13,7 @@ const createMockContext = () => ({
   translate: vi.fn(),
   rotate: vi.fn(),
   scale: vi.fn(),
+  transform: vi.fn(),
   beginPath: vi.fn(),
   moveTo: vi.fn(),
   lineTo: vi.fn(),
@@ -28,6 +29,5 @@ test('renderSriYantra renders without errors', () => {
   const params = defaultParams();
 
   expect(() => renderSriYantra(ctx, params, 1.0, 1.0)).not.toThrow();
-  expect(ctx.scale).toHaveBeenCalled();
   expect(ctx.closePath).toHaveBeenCalled();
 });

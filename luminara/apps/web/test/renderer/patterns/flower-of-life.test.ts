@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { renderFlowerOfLife } from '../../../src/renderer/patterns/flower-of-life';
-import { defaultParams } from '../../../src/core/params';
+import { renderFlowerOfLife } from '@/renderer/patterns/flower-of-life';
+import { defaultParams } from '@/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),

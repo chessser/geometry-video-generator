@@ -1,6 +1,6 @@
 import { test, expect, vi } from 'vitest';
-import { setupPattern, finishPattern } from '../../../src/renderer/patterns/pattern-base';
-import { defaultParams } from '../../../src/core/params';
+import { setupPattern, finishPattern } from '@/renderer/patterns/pattern-base';
+import { defaultParams } from '@/core/params';
 
 vi.mock('../../core/hash', () => ({
   hashToSeed: vi.fn(() => 12345),
