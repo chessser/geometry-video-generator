@@ -29,6 +29,8 @@ export function renderTreeOfLife(
 
   ctx.strokeStyle = `hsl(${hue}, 75%, 65%)`;
   sephirot.forEach(([x, y], i) => {
+    if (x === undefined || y === undefined) return;
+
     const circleSize = size * 0.08 * (0.8 + 0.4 * Math.sin(t * 0.3 + i));
     ctx.beginPath();
     ctx.arc(x, y, circleSize, 0, Math.PI * 2);
@@ -61,9 +63,22 @@ export function renderTreeOfLife(
     [8, 9], // Yesod to Malkuth
   ];
   connections.forEach(([a, b]) => {
+    if (a === undefined || b === undefined) return;
+    const pointA = sephirot[a];
+    const pointB = sephirot[b];
+    if (
+      !pointA ||
+      !pointB ||
+      pointA[0] === undefined ||
+      pointA[1] === undefined ||
+      pointB[0] === undefined ||
+      pointB[1] === undefined
+    )
+      return;
+
     ctx.beginPath();
-    ctx.moveTo(sephirot[a][0], sephirot[a][1]);
-    ctx.lineTo(sephirot[b][0], sephirot[b][1]);
+    ctx.moveTo(pointA[0], pointA[1]);
+    ctx.lineTo(pointB[0], pointB[1]);
     ctx.stroke();
   });
 

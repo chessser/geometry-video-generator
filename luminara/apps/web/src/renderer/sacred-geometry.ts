@@ -11,7 +11,7 @@ import {
 } from './patterns';
 import { hashToSeed } from '@/core/hash';
 
-export const PATTERNS: PatternType[] = [
+export const PATTERNS: readonly PatternType[] = [
   'flower-of-life',
   'seed-of-life',
   'metatrons-cube',
@@ -20,8 +20,9 @@ export const PATTERNS: PatternType[] = [
   'tree-of-life',
   'golden-spiral',
 ];
-const PATTERN_DURATION = 20;
-const FADE_DURATION = 3;
+import { APP_CONFIG } from '@/constants';
+
+const { PATTERN_DURATION, FADE_DURATION } = APP_CONFIG;
 
 export function renderSacredGeometry(
   ctx: CanvasRenderingContext2D,
@@ -60,6 +61,7 @@ export function renderSacredGeometry(
   for (let i = 0; i < numPatterns; i++) {
     const patternIndex = (Math.floor(t / PATTERN_DURATION) + i) % patternOrder.length;
     const pattern = patternOrder[patternIndex];
+    if (!pattern) continue;
     const phaseOffset = i * Math.PI * 0.6;
 
     // Calculate fade based on pattern lifecycle

@@ -81,8 +81,20 @@ function renderTriangleToSquare(ctx: CanvasRenderingContext2D, size: number, pro
       [-size * 0.866, size * 0.5],
     ];
     const triNext = (triSide + 1) % 3;
-    const triX = triVertices[triSide][0] * (1 - triT) + triVertices[triNext][0] * triT;
-    const triY = triVertices[triSide][1] * (1 - triT) + triVertices[triNext][1] * triT;
+    const triCurrent = triVertices[triSide];
+    const triNextVertex = triVertices[triNext];
+    if (!triCurrent || !triNextVertex) continue;
+
+    if (
+      triCurrent[0] === undefined ||
+      triCurrent[1] === undefined ||
+      triNextVertex[0] === undefined ||
+      triNextVertex[1] === undefined
+    )
+      continue;
+
+    const triX = triCurrent[0] * (1 - triT) + triNextVertex[0] * triT;
+    const triY = triCurrent[1] * (1 - triT) + triNextVertex[1] * triT;
 
     // Square point
     const sqSide = Math.min(Math.floor(t * 4), 3);
@@ -94,8 +106,20 @@ function renderTriangleToSquare(ctx: CanvasRenderingContext2D, size: number, pro
       [-size, size],
     ];
     const sqNext = (sqSide + 1) % 4;
-    const sqX = sqVertices[sqSide][0] * (1 - sqT) + sqVertices[sqNext][0] * sqT;
-    const sqY = sqVertices[sqSide][1] * (1 - sqT) + sqVertices[sqNext][1] * sqT;
+    const sqCurrent = sqVertices[sqSide];
+    const sqNextVertex = sqVertices[sqNext];
+    if (!sqCurrent || !sqNextVertex) continue;
+
+    if (
+      sqCurrent[0] === undefined ||
+      sqCurrent[1] === undefined ||
+      sqNextVertex[0] === undefined ||
+      sqNextVertex[1] === undefined
+    )
+      continue;
+
+    const sqX = sqCurrent[0] * (1 - sqT) + sqNextVertex[0] * sqT;
+    const sqY = sqCurrent[1] * (1 - sqT) + sqNextVertex[1] * sqT;
 
     // Interpolate
     const x = triX * (1 - progress) + sqX * progress;
@@ -125,8 +149,20 @@ function renderSquareToCircle(ctx: CanvasRenderingContext2D, size: number, progr
       [-size, size],
     ];
     const sqNext = (sqSide + 1) % 4;
-    const sqX = sqVertices[sqSide][0] * (1 - sqT) + sqVertices[sqNext][0] * sqT;
-    const sqY = sqVertices[sqSide][1] * (1 - sqT) + sqVertices[sqNext][1] * sqT;
+    const sqCurrent2 = sqVertices[sqSide];
+    const sqNextVertex2 = sqVertices[sqNext];
+    if (!sqCurrent2 || !sqNextVertex2) continue;
+
+    if (
+      sqCurrent2[0] === undefined ||
+      sqCurrent2[1] === undefined ||
+      sqNextVertex2[0] === undefined ||
+      sqNextVertex2[1] === undefined
+    )
+      continue;
+
+    const sqX = sqCurrent2[0] * (1 - sqT) + sqNextVertex2[0] * sqT;
+    const sqY = sqCurrent2[1] * (1 - sqT) + sqNextVertex2[1] * sqT;
 
     // Circle point
     const angle = t * Math.PI * 2;

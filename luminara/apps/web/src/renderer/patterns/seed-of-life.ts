@@ -38,6 +38,8 @@ export function renderSeedOfLife(
   }
 
   positions.forEach(([x, y], i) => {
+    if (x === undefined || y === undefined) return;
+
     let finalX = x;
     let finalY = y;
 

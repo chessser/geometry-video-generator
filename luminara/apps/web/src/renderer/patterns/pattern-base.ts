@@ -144,6 +144,8 @@ export function getFadeAlpha(
 ) {
   for (let i = 0; i < stageBreakpoints.length; i++) {
     const stageStart = stageBreakpoints[i];
+    if (stageStart === undefined) continue;
+
     const cyclePoint = (i + 1) / stageBreakpoints.length;
 
     if (

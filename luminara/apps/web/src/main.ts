@@ -3,7 +3,11 @@ import { attachPanel } from './ui/panel';
 import { defaultParams } from './core/params';
 import type { Theme } from './core/themes';
 
-const root = document.getElementById('app')!;
+const root = document.getElementById('app');
+if (!root) {
+  throw new Error('Root element not found');
+}
+
 const canvas = document.createElement('canvas');
 canvas.style.width = '100%';
 canvas.style.height = '100%';
